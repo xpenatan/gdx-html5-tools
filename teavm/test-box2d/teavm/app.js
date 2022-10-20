@@ -31484,7 +31484,8 @@ function cgxgbw_WebApplication_step($this, $appListener) {
     $this.$runnablesHelper.$clear3();
     var$4 = $this.$graphics0;
     var$4.$frameId = Long_add(var$4.$frameId, Long_fromInt(1));
-    $appListener.$render3();
+    if (Long_gt($this.$graphics0.$frameId, Long_fromInt(60)))
+        $appListener.$render3();
     $this.$input.$reset0();
 }
 function cgxgbw_WebApplication_initSound($this) {
