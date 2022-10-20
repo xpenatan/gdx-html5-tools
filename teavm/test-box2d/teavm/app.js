@@ -7519,19 +7519,15 @@ function ji_PrintStream_print1($this, $s) {
     $this.$sb.$append($s);
     ji_PrintStream_printSB($this);
 }
-function ji_PrintStream_println($this, $i) {
-    ($this.$sb.$append0($i)).$append5(10);
-    ji_PrintStream_printSB($this);
-}
-function ji_PrintStream_println0($this, $s) {
+function ji_PrintStream_println($this, $s) {
     ($this.$sb.$append($s)).$append5(10);
     ji_PrintStream_printSB($this);
 }
-function ji_PrintStream_println1($this, $s) {
+function ji_PrintStream_println0($this, $s) {
     ($this.$sb.$append2($s)).$append5(10);
     ji_PrintStream_printSB($this);
 }
-function ji_PrintStream_println2($this) {
+function ji_PrintStream_println1($this) {
     $this.$print1(10);
 }
 function ji_PrintStream_printSB($this) {
@@ -22049,8 +22045,8 @@ function cbgpbc_b2World_CreateBodyNative$js_body$_5(var$1, var$2, var$3, var$4, 
 }
 function cbgpbc_b2World_DestroyJointNATIVE$js_body$_10(var$1, var$2) {
     var world = Box2D.wrapPointer(var$1, Box2D.b2World);
-    var joint = Box2D.wrapPointer(bodyAddr, Box2D.b2Joint);
-    body.DestroyJoint(joint);
+    var joint = Box2D.wrapPointer(var$2, Box2D.b2Joint);
+    world.DestroyJoint(joint);
 }
 function cbgpbc_b2World_GetContactListNATIVE$js_body$_11(var$1, var$2) {
     var world = Box2D.wrapPointer(var$1, Box2D.b2World);
@@ -28125,10 +28121,7 @@ function cbgpb_World_createProperJoint($this, $def) {
     return $this.$b2World.$CreateMouseJoint($d.$bodyA.$b2Body, $d.$bodyB.$b2Body, $d.$collideConnected, $d.$target.$x0, $d.$target.$y0, $d.$maxForce, $d.$frequencyHz, $d.$dampingRatio);
 }
 function cbgpb_World_QueryAABB($this, $callback, $lowerX, $lowerY, $upperX, $upperY) {
-    var $test;
     $this.$callback = $callback;
-    $test = 51321;
-    (jl_System_out()).$println2($test);
     $this.$b2World.$QueryAABB($this, $lowerX, $lowerY, $upperX, $upperY);
 }
 function cbgpb_World_ReportFixture$exported$0(var$0, var$1) {
@@ -32456,7 +32449,7 @@ ji_Closeable, 0, jl_Object, [jl_AutoCloseable], 3, 3, 0, 0, 0,
 ji_Flushable, 0, jl_Object, [], 3, 3, 0, 0, 0,
 ji_OutputStream, 0, jl_Object, [ji_Closeable, ji_Flushable], 1, 3, 0, 0, ["$_init_0", $rt_wrapFunction0(ji_OutputStream__init_), "$write0", $rt_wrapFunction3(ji_OutputStream_write)],
 ji_FilterOutputStream, 0, ji_OutputStream, [], 0, 3, 0, 0, ["$_init_52", $rt_wrapFunction1(ji_FilterOutputStream__init_0)],
-ji_PrintStream, 0, ji_FilterOutputStream, [], 0, 3, 0, 0, ["$_init_163", $rt_wrapFunction2(ji_PrintStream__init_0), "$write0", $rt_wrapFunction3(ji_PrintStream_write), "$print1", $rt_wrapFunction1(ji_PrintStream_print0), "$print", $rt_wrapFunction1(ji_PrintStream_print1), "$println2", $rt_wrapFunction1(ji_PrintStream_println), "$println", $rt_wrapFunction1(ji_PrintStream_println0), "$println1", $rt_wrapFunction1(ji_PrintStream_println1), "$println0", $rt_wrapFunction0(ji_PrintStream_println2)],
+ji_PrintStream, 0, ji_FilterOutputStream, [], 0, 3, 0, 0, ["$_init_163", $rt_wrapFunction2(ji_PrintStream__init_0), "$write0", $rt_wrapFunction3(ji_PrintStream_write), "$print1", $rt_wrapFunction1(ji_PrintStream_print0), "$print", $rt_wrapFunction1(ji_PrintStream_print1), "$println", $rt_wrapFunction1(ji_PrintStream_println), "$println1", $rt_wrapFunction1(ji_PrintStream_println0), "$println0", $rt_wrapFunction0(ji_PrintStream_println1)],
 jur_NegativeLookBehind, "NegativeLookBehind", 22, jur_AtomicJointSet, [], 0, 0, 0, 0, ["$_init_32", $rt_wrapFunction2(jur_NegativeLookBehind__init_0), "$matches", $rt_wrapFunction3(jur_NegativeLookBehind_matches), "$hasConsumed", $rt_wrapFunction1(jur_NegativeLookBehind_hasConsumed), "$getName", $rt_wrapFunction0(jur_NegativeLookBehind_getName)],
 jn_IntBuffer, 0, jn_Buffer, [jl_Comparable], 1, 3, 0, 0, ["$_init_54", $rt_wrapFunction3(jn_IntBuffer__init_), "$clear1", $rt_wrapFunction0(jn_IntBuffer_clear), "$clear0", $rt_wrapFunction0(jn_IntBuffer_clear0)],
 jn_IntBufferImpl, 0, jn_IntBuffer, [], 1, 0, 0, 0, ["$_init_54", $rt_wrapFunction3(jn_IntBufferImpl__init_), "$get14", $rt_wrapFunction0(jn_IntBufferImpl_get), "$put12", $rt_wrapFunction1(jn_IntBufferImpl_put), "$get13", $rt_wrapFunction1(jn_IntBufferImpl_get0), "$put11", $rt_wrapFunction2(jn_IntBufferImpl_put0), "$isReadOnly", $rt_wrapFunction0(jn_IntBufferImpl_isReadOnly)],
