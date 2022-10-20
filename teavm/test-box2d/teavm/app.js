@@ -27989,11 +27989,11 @@ function cbgpb_World_createContactAddrs($this, $newSize) {
     $this.$contactAddrs = $rt_createIntArray($newSize);
 }
 function cbgpb_World_ReportFixture($this, $b2FixtureAddr) {
-    var $fixture, $flag;
+    var $fixture;
     $fixture = $this.$fixtures.$get6(Long_fromInt($b2FixtureAddr));
-    $flag = $this.$callback.$reportFixture($fixture);
-    $this.$callback = null;
-    return $flag;
+    if ($this.$callback === null)
+        return 0;
+    return $this.$callback.$reportFixture($fixture);
 }
 function cbgpb_World__init_0($this, $gravity, $doSleep) {
     var $b2Gravity, $i;
