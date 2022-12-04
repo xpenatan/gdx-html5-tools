@@ -1,0 +1,134 @@
+
+ui.png
+size: 256,256
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+font11_gradient
+  rotate: false
+  xy: 1, 121
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
+font8
+  rotate: false
+  xy: 1, 55
+  size: 128, 64
+  orig: 128, 64
+  offset: 0, 0
+  index: -1
+frame
+  rotate: false
+  xy: 131, 220
+  size: 20, 20
+  split: 7, 7, 7, 7
+  orig: 20, 20
+  offset: 0, 0
+  index: -1
+frame_transparent
+  rotate: false
+  xy: 23, 9
+  size: 20, 20
+  split: 7, 7, 7, 7
+  orig: 20, 20
+  offset: 0, 0
+  index: -1
+game_hud
+  rotate: false
+  xy: 1, 31
+  size: 126, 22
+  orig: 126, 22
+  offset: 0, 0
+  index: -1
+label_frame
+  rotate: false
+  xy: 1, 9
+  size: 20, 20
+  split: 7, 7, 7, 7
+  orig: 20, 20
+  offset: 0, 0
+  index: -1
+label_frame_transparent
+  rotate: false
+  xy: 131, 198
+  size: 20, 20
+  split: 7, 7, 7, 7
+  orig: 20, 20
+  offset: 0, 0
+  index: -1
+life_bar
+  rotate: false
+  xy: 195, 243
+  size: 22, 6
+  split: 2, 2, 2, 2
+  pad: 0, 0, 0, 0
+  orig: 22, 6
+  offset: 0, 0
+  index: -1
+no_sound
+  rotate: false
+  xy: 131, 187
+  size: 11, 9
+  orig: 11, 9
+  offset: 0, 0
+  index: -1
+pause
+  rotate: false
+  xy: 45, 11
+  size: 6, 7
+  orig: 6, 7
+  offset: 0, 0
+  index: -1
+play
+  rotate: false
+  xy: 153, 207
+  size: 5, 9
+  orig: 5, 9
+  offset: 0, 0
+  index: -1
+quit
+  rotate: false
+  xy: 160, 232
+  size: 8, 8
+  orig: 8, 8
+  offset: 0, 0
+  index: -1
+scroll_knob
+  rotate: false
+  xy: 219, 244
+  size: 5, 5
+  orig: 5, 5
+  offset: 0, 0
+  index: -1
+scroll_v
+  rotate: false
+  xy: 153, 218
+  size: 5, 22
+  split: 0, 0, 8, 9
+  orig: 5, 22
+  offset: 0, 0
+  index: -1
+shield_bar
+  rotate: false
+  xy: 1, 1
+  size: 22, 6
+  split: 2, 2, 2, 2
+  pad: 0, 0, 0, 0
+  orig: 22, 6
+  offset: 0, 0
+  index: -1
+sound
+  rotate: false
+  xy: 45, 20
+  size: 11, 9
+  orig: 11, 9
+  offset: 0, 0
+  index: -1
+warning
+  rotate: false
+  xy: 131, 242
+  size: 62, 7
+  orig: 62, 7
+  offset: 0, 0
+  index: -1
