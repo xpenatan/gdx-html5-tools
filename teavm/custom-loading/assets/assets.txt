@@ -7,6 +7,15 @@ i:data/badlogic.jpg:68465:image/jpeg
 i:data/badlogicsmall.jpg:1787:image/jpeg
 t:data/default.fnt:11527:application/unknown
 i:data/default.png:26179:image/png
+i:data/g3d/knight/armor.jpg:1975143:image/jpeg
+i:data/g3d/knight/gen.face.jpg:534668:image/jpeg
+t:data/g3d/knight/knight - Copy (2).obj:27079755:application/octet-stream
+t:data/g3d/knight/knight - Copy (3).obj:27079755:application/octet-stream
+t:data/g3d/knight/knight - Copy (4).obj:27079755:application/octet-stream
+t:data/g3d/knight/knight - Copy (5).obj:27079755:application/octet-stream
+t:data/g3d/knight/knight - Copy (6).obj:27079755:application/octet-stream
+t:data/g3d/knight/knight - Copy (7).obj:27079755:application/octet-stream
+t:data/g3d/knight/knight - Copy (8).obj:27079755:application/octet-stream
 b:data/g3d/ship/ship.mtl:102:application/unknown
 t:data/g3d/ship/ship.obj:16608:application/octet-stream
 i:data/g3d/ship/ship.png:35161:image/png
