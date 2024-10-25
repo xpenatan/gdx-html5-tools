@@ -10,6 +10,7 @@ import com.github.xpenatan.gdx.backends.teavm.dom.typedarray.TypedArrays;
 import org.teavm.jso.JSBody;
 import org.teavm.jso.JSObject;
 import org.teavm.jso.ajax.XMLHttpRequest;
+import org.teavm.jso.browser.TimerHandler;
 import org.teavm.jso.browser.Window;
 import org.teavm.jso.dom.html.HTMLDocument;
 import org.teavm.jso.dom.html.HTMLScriptElement;
@@ -152,11 +153,12 @@ public class AssetDownloadImpl implements AssetDownload {
         // don't load on main thread
         addQueue();
         if(async) {
-            new Thread() {
-                public void run() {
+            Window.setTimeout(new TimerHandler() {
+                @Override
+                public void onTimer() {
                     loadBinaryInternally(true, url, listener, count);
                 }
-            }.start();
+            }, 100);
         }
         else {
             loadBinaryInternally(false, url, listener, count);
@@ -176,14 +178,13 @@ public class AssetDownloadImpl implements AssetDownload {
                 else if(status != 200) {
                     if ((status != 404) && (status != 403)) {
                         // re-try: e.g. failure due to ERR_HTTP2_SERVER_REFUSED_STREAM (too many requests)
-                        try {
-                            Thread.sleep(100);
-                        }
-                        catch (Throwable e) {
-                            // ignored
-                        }
-                        int newCount = count + 1;
-                        loadBinary(async, url, listener, newCount);
+                        Window.setTimeout(new TimerHandler() {
+                            @Override
+                            public void onTimer() {
+                                int newCount = count + 1;
+                                loadBinary(async, url, listener, newCount);
+                            }
+                        }, 100);
                     }
                     else {
                         if(listener != null) {
@@ -199,14 +200,15 @@ public class AssetDownloadImpl implements AssetDownload {
                     if(isString(jsResponse)) {
                         // sync downloading is always string
                         String responseStr = toString(jsResponse);
-                        Int8ArrayWrapper typedArray = TypedArrays.getTypedArray(responseStr.getBytes());
-                        data = (Int8Array)typedArray;
-                        arrayBuffer = data.getBuffer();
+                        System.out.println("jsResponse: " + jsResponse);
+                        System.out.println("responseStr: " + responseStr);
+//                        Int8ArrayWrapper typedArray = TypedArrays.getTypedArray(jsResponse.toString().getBytes());
+//                        data = (Int8Array)typedArray;
+//                        arrayBuffer = data.getBuffer();
                     }
                     else {
-                        ArrayBufferWrapper response = (ArrayBufferWrapper)jsResponse;
-                        data = (Int8Array)TypedArrays.createInt8Array(response);
-                        arrayBuffer = (ArrayBuffer)response;
+                        data = (Int8Array)TypedArrays.createInt8Array((ArrayBufferWrapper)jsResponse);
+                        arrayBuffer = (ArrayBuffer)jsResponse;
                     }
 
                     if(listener != null) {
