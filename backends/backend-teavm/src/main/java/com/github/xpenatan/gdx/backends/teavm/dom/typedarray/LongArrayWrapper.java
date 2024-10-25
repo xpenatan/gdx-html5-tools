@@ -1,15 +1,14 @@
 package com.github.xpenatan.gdx.backends.teavm.dom.typedarray;
 
+import org.teavm.jso.JSObject;
+
 /**
  * @author xpenatan
  */
-public interface LongArrayWrapper {
+public interface LongArrayWrapper extends JSObject {
     // LongArray
-    public int getLength();
-
-    public void setLength(int length);
-
-    public int getElement(int index);
-
-    public void setElement(int index, int value);
+    int getLength();
+    void setLength(int length);
+    int getElement(int index);
+    void setElement(int index, int value);
 }
