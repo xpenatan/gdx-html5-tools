@@ -17,7 +17,7 @@ public interface Uint16ArrayWrapper extends ArrayBufferViewWrapper {
     byte get(int index);
 
     @JSIndexer
-    void set(int index, byte value);
+    void set(int index, short value);
 
     void set(Uint16ArrayWrapper array);
 

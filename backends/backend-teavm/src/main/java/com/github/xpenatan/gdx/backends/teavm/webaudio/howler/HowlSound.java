@@ -4,14 +4,15 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
 import com.github.xpenatan.gdx.backends.teavm.dom.typedarray.ArrayBufferViewWrapper;
 import com.github.xpenatan.gdx.backends.teavm.dom.typedarray.TypedArrays;
+import org.teavm.jso.JSObject;
 
 public class HowlSound implements Sound {
 
     private Howl howl;
 
     public HowlSound(FileHandle fileHandle) {
-        byte[] bytes = fileHandle.readBytes();
-        ArrayBufferViewWrapper data = TypedArrays.getTypedArray(bytes);
+        byte[] array = fileHandle.readBytes();
+        ArrayBufferViewWrapper data = (ArrayBufferViewWrapper)TypedArrays.getTypedByteArray(array);
         howl = Howl.create(data);
     }
 

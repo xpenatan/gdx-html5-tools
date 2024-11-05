@@ -13,6 +13,8 @@ gretty {
 
 dependencies {
     implementation("com.badlogicgames.gdx:gdx:${LibExt.gdxVersion}")
+    implementation("com.fasterxml.jackson.core:jackson-annotations:2.5.4")
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.5.4")
     implementation(project(":examples:core:core"))
 
     implementation(project(":backends:backend-teavm"))

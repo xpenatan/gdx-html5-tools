@@ -9,6 +9,8 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -18,12 +20,12 @@ import java.util.Set;
 import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
-import org.teavm.diagnostics.DefaultProblemTextConsumer;
+import javassist.compiler.CompileError;
+import org.reflections.Reflections;
+import org.reflections.scanners.Scanners;
 import org.teavm.diagnostics.Problem;
 import org.teavm.diagnostics.ProblemProvider;
-import org.teavm.model.CallLocation;
-import org.teavm.model.MethodReference;
-import org.teavm.model.TextLocation;
+import org.teavm.tooling.TeaVMProblemRenderer;
 import org.teavm.tooling.TeaVMTargetType;
 import org.teavm.tooling.TeaVMTool;
 import org.teavm.vm.TeaVMOptimizationLevel;
@@ -99,6 +101,45 @@ public class TeaBuilder {
         automaticReflection(configuration);
         configClasspath(configuration, acceptedURL, notAcceptedURL);
 
+        ArrayList<String> reflectionsCls = new ArrayList<>();
+        List<String> reflectionClasses = TeaReflectionSupplier.getReflectionClasses();
+        reflectionsCls.addAll(reflectionClasses);
+        reflectionClasses.clear();
+
+        for(int i = 0; i < reflectionsCls.size(); i++) {
+            String packageOrClass = reflectionsCls.get(i);
+            boolean isClass = false;
+            try {
+                Class.forName(packageOrClass);
+                isClass = true;
+            } catch(ClassNotFoundException e) {
+            }
+
+            if(isClass) {
+                TeaReflectionSupplier.addReflectionClass(packageOrClass);
+                continue;
+            }
+
+            Reflections reflections = new Reflections(packageOrClass);
+
+            Set<String> all = reflections.getAll(Scanners.SubTypes);
+
+            Iterator<String> iterator = all.iterator();
+            while(iterator.hasNext()) {
+                String className = iterator.next();
+                if(className.startsWith(packageOrClass)) {
+                    try {
+                        boolean assignableFrom = Object.class.isAssignableFrom(Class.forName(className));
+                        if(assignableFrom) {
+                            TeaReflectionSupplier.addReflectionClass(className);
+                        }
+                    } catch(ClassNotFoundException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
+        }
+
         TeaBuilder.log("");
         TeaBuilder.log("targetDirectory: " + webappDirectory);
         TeaBuilder.log("");
@@ -138,39 +179,11 @@ public class TeaBuilder {
             List<Problem> problems = problemProvider.getProblems();
             if(problems.size() > 0) {
                 TeaBuilder.logHeader("Compiler problems");
-
-                DefaultProblemTextConsumer p = new DefaultProblemTextConsumer();
-
-                for(int i = 0; i < problems.size(); i++) {
-                    Problem problem = problems.get(i);
-                    CallLocation location = problem.getLocation();
-                    MethodReference method = location != null ? location.getMethod() : null;
-                    String classSource = "-";
-                    String methodName = "-";
-
-                    if(location != null) {
-                        TextLocation sourceLocation = location.getSourceLocation();
-                        if(sourceLocation != null)
-                            classSource = sourceLocation.toString();
-                        if(method != null) {
-                            methodName = method.toString();
-                        }
-                    }
-
-                    if(i > 0) {
-                        TeaBuilder.log("");
-                        TeaBuilder.log("----");
-                        TeaBuilder.log("");
-                    }
-                    TeaBuilder.log(problem.getSeverity().toString() + "[" + i + "]");
-                    TeaBuilder.log("Class: " + classSource);
-                    TeaBuilder.log("Method: " + methodName);
-                    p.clear();
-                    problem.render(p);
-                    String text = p.getText();
-                    TeaBuilder.log("Text: " + text);
-                }
+                TeaErrorLog log = new TeaErrorLog();
+                TeaVMProblemRenderer.describeProblems(tool.getDependencyInfo().getCallGraph(), problemProvider, log);
+                System.err.print("\n" + log.sb.toString());
                 TeaBuilder.logEnd();
+                throw new CompileError("Build Errors");
             }
             else {
                 isSuccess = true;
@@ -429,8 +442,14 @@ public class TeaBuilder {
         boolean setSourceMapsFileGenerated = false;
         boolean setSourceFilesCopied = false;
 
+        TeaVMTargetType targetType = TeaVMTargetType.JAVASCRIPT;
+
         File setTargetDirectory = new File(webappDirectory + File.separator + webappName + File.separator + "teavm");
         String setTargetFileName = "app.js";
+        if(targetType == TeaVMTargetType.WEBASSEMBLY_GC) {
+            copyRuntime(setTargetDirectory);
+            setTargetFileName = "app.wasm";
+        }
         String tmpdir = System.getProperty("java.io.tmpdir");
         File setCacheDirectory = new File(tmpdir + File.separator + "TeaVMCache");
         boolean setIncremental = false;
@@ -453,7 +472,7 @@ public class TeaBuilder {
         tool.setIncremental(setIncremental);
         tool.setCacheDirectory(setCacheDirectory);
         tool.setStrict(false);
-        tool.setTargetType(TeaVMTargetType.JAVASCRIPT);
+        tool.setTargetType(targetType);
         tool.setProgressListener(new TeaVMProgressListener() {
             TeaVMPhase phase = null;
 
@@ -485,6 +504,23 @@ public class TeaBuilder {
             }
         });
         preserveClasses(tool, configuration, classLoader);
+    }
+
+    public static void copyRuntime(File setTargetDirectory) {
+        try {
+            var name = new StringBuilder("wasm-gc");
+            name.append("-runtime");
+    //        if (getObfuscated().get()) {
+    //            name.append(".min");
+    //        }
+            var resourceName = "org/teavm/backend/wasm/" + name + ".js";
+            var classLoader = TeaBuilder.class.getClassLoader();
+            try (var input = classLoader.getResourceAsStream(resourceName)) {
+                Files.copy(input, setTargetDirectory.toPath().resolve(name + ".js"), StandardCopyOption.REPLACE_EXISTING);
+            }
+        } catch(Throwable t) {
+            t.printStackTrace();
+        }
     }
 
     public static void configAssets(TeaClassLoader classLoader, TeaBuildConfiguration configuration, String webappDirectory, String webappName, ArrayList<URL> acceptedURL) {

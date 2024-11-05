@@ -142,15 +142,15 @@ public class TeaGL20 implements GL20 {
             gl.bufferData(target, size, usage);
         }
         else {
-            ArrayBufferViewWrapper typedArray = TypedArrays.getTypedArray(data);
+            ArrayBufferViewWrapper typedArray = TypedArrays.getTypedArray(false, data);
             gl.bufferData(target, typedArray, usage);
         }
     }
 
     @Override
     public void glBufferSubData(int target, int offset, int size, Buffer data) {
-        ArrayBufferViewWrapper typedArray = TypedArrays.getTypedArray(data);
-        gl.bufferSubData(target, offset, typedArray);
+//        ArrayBufferViewWrapper typedArray = TypedArrays.getTypedArray(false, data);
+//        gl.bufferSubData(target, offset, typedArray);
     }
 
     @Override
@@ -731,15 +731,15 @@ public class TeaGL20 implements GL20 {
 
     @Override
     public void glReadPixels(int x, int y, int width, int height, int format, int type, Buffer pixels) {
-        // verify request
-        if((format != WebGLRenderingContext.RGBA) || (type != WebGLRenderingContext.UNSIGNED_BYTE)) {
-            throw new GdxRuntimeException(
-                    "Only format RGBA and type UNSIGNED_BYTE are currently supported for glReadPixels(...). Create an issue when you need other formats.");
-        }
-        ArrayBufferViewWrapper typedArray = TypedArrays.getTypedArray(pixels);
-        int size = 4 * width * height;
-        Uint8ArrayWrapper buffer = TypedArrays.createUint8Array(typedArray.getBuffer(), typedArray.getByteOffset(), size);
-        gl.readPixels(x, y, width, height, format, type, buffer);
+//        // verify request
+//        if((format != WebGLRenderingContext.RGBA) || (type != WebGLRenderingContext.UNSIGNED_BYTE)) {
+//            throw new GdxRuntimeException(
+//                    "Only format RGBA and type UNSIGNED_BYTE are currently supported for glReadPixels(...). Create an issue when you need other formats.");
+//        }
+//        ArrayBufferViewWrapper typedArray = TypedArrays.getTypedArray(true, pixels);
+//        int size = 4 * width * height;
+//        Uint8ArrayWrapper buffer = TypedArrays.createUint8Array(typedArray.getBuffer(), typedArray.getByteOffset(), size);
+//        gl.readPixels(x, y, width, height, format, type, buffer);
     }
 
     @Override
@@ -809,30 +809,32 @@ public class TeaGL20 implements GL20 {
             return;
         }
 
-        ArrayBufferViewWrapper arrayBuffer = TypedArrays.getTypedArray(pixels);
+        ArrayBufferViewWrapper arrayBuffer = TypedArrays.getTypedArray(false, pixels);
         if(type == WebGLRenderingContext.UNSIGNED_BYTE) {
             int byteOffset = arrayBuffer.getByteOffset() + pixels.position();
             arrayBuffer = TypedArrays.createUint8Array(arrayBuffer.getBuffer(), byteOffset, pixels.remaining());
         }
-        else if(type == WebGLRenderingContext.UNSIGNED_SHORT || type == GL_UNSIGNED_SHORT_5_6_5 || type == GL_UNSIGNED_SHORT_4_4_4_4) {
-            int byteOffset = arrayBuffer.getByteOffset() + pixels.position();
-            arrayBuffer = TypedArrays.createUint16Array(arrayBuffer.getBuffer(), byteOffset, pixels.remaining());
-        }
+//        else if(type == WebGLRenderingContext.UNSIGNED_SHORT || type == GL_UNSIGNED_SHORT_5_6_5 || type == GL_UNSIGNED_SHORT_4_4_4_4) {
+//            int byteOffset = arrayBuffer.getByteOffset() + pixels.position();
+//            arrayBuffer = TypedArrays.createUint16Array(arrayBuffer.getBuffer(), byteOffset, pixels.remaining());
+//        }
         gl.texImage2D(target, level, internalformat, width, height, border, format, type, arrayBuffer);
     }
 
     @Override
     public void glTexSubImage2D(int target, int level, int xoffset, int yoffset, int width, int height, int format, int type, Buffer pixels) {
-        ArrayBufferViewWrapper arrayBuffer = TypedArrays.getTypedArray(pixels);
         if(type == WebGLRenderingContext.UNSIGNED_BYTE) {
-            int byteOffset = arrayBuffer.getByteOffset() + pixels.position();
-            arrayBuffer = TypedArrays.createUint8Array(arrayBuffer.getBuffer(), byteOffset, pixels.remaining());
+            ArrayBufferViewWrapper arrayBuffer = TypedArrays.getTypedArray(true, pixels);
+//            int byteOffset = arrayBuffer.getByteOffset() + pixels.position();
+//            arrayBuffer = TypedArrays.createUint8Array(arrayBuffer.getBuffer(), byteOffset, pixels.remaining());
+            gl.texSubImage2D(target, level, xoffset, yoffset, width, height, format, type, arrayBuffer);
         }
         else if(type == WebGLRenderingContext.UNSIGNED_SHORT || type == GL_UNSIGNED_SHORT_5_6_5 || type == GL_UNSIGNED_SHORT_4_4_4_4) {
-            int byteOffset = arrayBuffer.getByteOffset() + pixels.position();
-            arrayBuffer = TypedArrays.createUint16Array(arrayBuffer.getBuffer(), byteOffset, pixels.remaining());
+            ArrayBufferViewWrapper arrayBuffer = TypedArrays.getTypedArray(true, pixels);
+//            int byteOffset = arrayBuffer.getByteOffset() + pixels.position();
+//            arrayBuffer = TypedArrays.createUint16Array(arrayBuffer.getBuffer(), byteOffset, pixels.remaining());
+            gl.texSubImage2D(target, level, xoffset, yoffset, width, height, format, type, arrayBuffer);
         }
-        gl.texSubImage2D(target, level, xoffset, yoffset, width, height, format, type, arrayBuffer);
     }
 
     @Override

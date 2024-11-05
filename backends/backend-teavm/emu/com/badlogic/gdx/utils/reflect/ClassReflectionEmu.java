@@ -1,5 +1,9 @@
 package com.badlogic.gdx.utils.reflect;
 
+import com.badlogic.gdx.utils.reflect.gen.ClassGen;
+import com.badlogic.gdx.utils.reflect.gen.ClassProxy;
+import com.badlogic.gdx.utils.reflect.gen.FieldGen;
+import com.badlogic.gdx.utils.reflect.gen.FieldProxy;
 import com.github.xpenatan.gdx.backends.teavm.gen.Emulate;
 import java.lang.reflect.Modifier;
 
@@ -14,13 +18,19 @@ public final class ClassReflectionEmu {
     /**
      * Returns the Class object associated with the class or interface with the supplied string name.
      */
-    static public Class forName(String name) throws ReflectionException {
-        try {
-            return Class.forName(name);
-        }
-        catch(ClassNotFoundException e) {
-            throw new ReflectionException("Class not found: " + name, e);
-        }
+    static public Class forName(String name) throws ReflectionException, ClassNotFoundException {
+        ClassProxy classProxy = ClassGen.getClassProxyByName(name);
+        return classProxy.getType();
+//        try {
+//            return Class.forName(name);
+//        }
+//        catch(ClassNotFoundException e) {
+//            throw new ReflectionException("Class not found: " + name, e);
+//        }
+//        if(classProxy != null) {
+//            return classProxy.getType();
+//        }
+//        return null;
     }
 
     /**
@@ -49,7 +59,8 @@ public final class ClassReflectionEmu {
      * Returns true if the class or interface represented by the supplied Class is a member class.
      */
     static public boolean isMemberClass(Class c) {
-        return c.isMemberClass();
+        ClassProxy classProxy = ClassGen.getClassProxy(c);
+        return classProxy.isMemberClass();
     }
 
     /**
@@ -111,15 +122,11 @@ public final class ClassReflectionEmu {
      * Creates a new instance of the class represented by the supplied Class.
      */
     static public <T> T newInstance(Class<T> c) throws ReflectionException {
-        try {
-            return c.newInstance();
+        if(c == Object.class) {
+            return (T)new Object();
         }
-        catch(InstantiationException e) {
-            throw new ReflectionException("Could not instantiate instance of class: " + c.getName(), e);
-        }
-        catch(IllegalAccessException e) {
-            throw new ReflectionException("Could not instantiate instance of class: " + c.getName(), e);
-        }
+        T instance = (T)ClassGen.createInstance(c);
+        return instance;
     }
 
     /**
@@ -133,12 +140,13 @@ public final class ClassReflectionEmu {
      * Returns an array of {@link Constructor} containing the public constructors of the class represented by the supplied Class.
      */
     static public Constructor[] getConstructors(Class c) {
-        java.lang.reflect.Constructor[] constructors = c.getConstructors();
-        Constructor[] result = new Constructor[constructors.length];
-        for(int i = 0, j = constructors.length; i < j; i++) {
-            result[i] = new Constructor(constructors[i]);
-        }
-        return result;
+//        java.lang.reflect.Constructor[] constructors = c.getConstructors();
+//        Constructor[] result = new Constructor[constructors.length];
+//        for(int i = 0, j = constructors.length; i < j; i++) {
+//            result[i] = new Constructor(constructors[i]);
+//        }
+//        return result;
+        return null;
     }
 
     static private Constructor getNoArgPublicConstructor(Class c) {
@@ -154,22 +162,23 @@ public final class ClassReflectionEmu {
      */
     static public Constructor getConstructor(Class c, Class... parameterTypes) throws ReflectionException {
 
-        if(parameterTypes == null || parameterTypes.length == 0) {
-            //Teavm does not accept null parameter to get public no args constructor. Need to do it manually
-            return getNoArgPublicConstructor(c);
-        }
-
-        try {
-            java.lang.reflect.Constructor constructor = c.getConstructor(parameterTypes);
-            return new Constructor(constructor);
-        }
-        catch(SecurityException e) {
-            throw new ReflectionException("Security violation occurred while getting constructor for class: '" + c.getName() + "'.",
-                    e);
-        }
-        catch(NoSuchMethodException e) {
-            throw new ReflectionException("Constructor not found for class: " + c.getName(), e);
-        }
+//        if(parameterTypes == null || parameterTypes.length == 0) {
+//            //Teavm does not accept null parameter to get public no args constructor. Need to do it manually
+//            return getNoArgPublicConstructor(c);
+//        }
+//
+//        try {
+//            java.lang.reflect.Constructor constructor = c.getConstructor(parameterTypes);
+//            return new Constructor(constructor);
+//        }
+//        catch(SecurityException e) {
+//            throw new ReflectionException("Security violation occurred while getting constructor for class: '" + c.getName() + "'.",
+//                    e);
+//        }
+//        catch(NoSuchMethodException e) {
+//            throw new ReflectionException("Constructor not found for class: " + c.getName(), e);
+//        }
+        return null;
     }
 
     /**
@@ -177,16 +186,17 @@ public final class ClassReflectionEmu {
      * types.
      */
     static public Constructor getDeclaredConstructor(Class c, Class... parameterTypes) throws ReflectionException {
-        try {
-            java.lang.reflect.Constructor declaredConstructor = c.getDeclaredConstructor(parameterTypes);
-            return new Constructor(declaredConstructor);
-        }
-        catch(SecurityException e) {
-            throw new ReflectionException("Security violation while getting constructor for class: " + c.getName(), e);
-        }
-        catch(NoSuchMethodException e) {
-            throw new ReflectionException("Constructor not found for class: " + c.getName(), e);
-        }
+//        try {
+//            java.lang.reflect.Constructor declaredConstructor = c.getDeclaredConstructor(parameterTypes);
+//            return new Constructor(declaredConstructor);
+//        }
+//        catch(SecurityException e) {
+//            throw new ReflectionException("Security violation while getting constructor for class: " + c.getName(), e);
+//        }
+//        catch(NoSuchMethodException e) {
+//            throw new ReflectionException("Constructor not found for class: " + c.getName(), e);
+//        }
+        return null;
     }
 
     /**
@@ -253,53 +263,61 @@ public final class ClassReflectionEmu {
      */
     static public FieldEmu[] getFields(Class c) {
         // there is a bug in teavm that using just getFields the fields are not generated.
-        c.getDeclaredFields();
-
-        java.lang.reflect.Field[] fields = c.getFields();
-        FieldEmu[] result = new FieldEmu[fields.length];
-        for(int i = 0, j = fields.length; i < j; i++) {
-            result[i] = new FieldEmu(fields[i]);
-        }
-        return result;
+//        c.getDeclaredFields();
+//
+//        java.lang.reflect.Field[] fields = c.getFields();
+//        FieldEmu[] result = new FieldEmu[fields.length];
+//        for(int i = 0, j = fields.length; i < j; i++) {
+//            result[i] = new FieldEmu(fields[i]);
+//        }
+//        return result;
+        return null;
     }
 
     /**
      * Returns a {@link FieldEmu} that represents the specified public member field for the supplied class.
      */
     static public FieldEmu getField(Class c, String name) throws ReflectionException {
-        try {
-            java.lang.reflect.Field field = c.getField(name);
-            return new FieldEmu(field);
-        }
-        catch(Throwable e) {
-            e.printStackTrace();
-        }
-        return null;
+        ClassProxy classProxy = ClassGen.getClassProxy(c);
+        FieldProxy fieldProxy = classProxy.getField(name);
+        return new FieldEmu(fieldProxy);
+//        try {
+//            java.lang.reflect.Field field = c.getField(name);
+//            return new FieldEmu(field);
+//        }
+//        catch(Throwable e) {
+//            e.printStackTrace();
+//        }
+//        return null;
     }
 
     /**
      * Returns an array of {@link FieldEmu} objects reflecting all the fields declared by the supplied class.
      */
     static public FieldEmu[] getDeclaredFields(Class c) {
-        java.lang.reflect.Field[] fields = c.getDeclaredFields();
-        FieldEmu[] result = new FieldEmu[fields.length];
-        for(int i = 0, j = fields.length; i < j; i++) {
-            result[i] = new FieldEmu(fields[i]);
+        ClassProxy classProxy = ClassGen.getClassProxy(c);
+        if(classProxy != null) {
+            FieldProxy[] declaredFields = classProxy.getDeclaredFields();
+            FieldEmu[] result = new FieldEmu[declaredFields.length];
+            for(int i = 0, j = result.length; i < j; i++) {
+                result[i] = new FieldEmu(declaredFields[i]);
+            }
+            return result;
         }
-        return result;
+        return null;
     }
 
     /**
      * Returns a {@link FieldEmu} that represents the specified declared field for the supplied class.
      */
     static public FieldEmu getDeclaredField(Class c, String name) throws ReflectionException {
-        try {
-            java.lang.reflect.Field declaredField = c.getDeclaredField(name);
-            return new FieldEmu(declaredField);
-        }
-        catch(Throwable e) {
-            e.printStackTrace();
-        }
+//        try {
+//            java.lang.reflect.Field declaredField = c.getDeclaredField(name);
+//            return new FieldEmu(declaredField);
+//        }
+//        catch(Throwable e) {
+//            e.printStackTrace();
+//        }
         return null;
     }
 

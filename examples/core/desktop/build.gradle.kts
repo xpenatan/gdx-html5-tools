@@ -21,4 +21,5 @@ tasks.register<JavaExec>("core-run-desktop") {
         // Required to run on macOS
         jvmArgs?.add("-XstartOnFirstThread")
     }
+    enableAssertions = true
 }

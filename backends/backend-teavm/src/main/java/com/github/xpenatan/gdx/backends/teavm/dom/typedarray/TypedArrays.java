@@ -6,11 +6,9 @@ import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.nio.ShortBuffer;
-import org.teavm.classlib.java.nio.HasArrayBufferView;
 import org.teavm.jso.JSBody;
-import org.teavm.jso.JSByRef;
-import org.teavm.jso.JSObject;
 import org.teavm.jso.typedarrays.ArrayBuffer;
+import org.teavm.jso.typedarrays.ArrayBufferView;
 import org.teavm.jso.typedarrays.Float32Array;
 import org.teavm.jso.typedarrays.Int16Array;
 import org.teavm.jso.typedarrays.Int32Array;
@@ -146,6 +144,16 @@ public class TypedArrays {
         return (Uint8ArrayWrapper)Uint8Array.create(arrayBuffer, offset, length);
     }
 
+    public static Uint16ArrayWrapper createUint16Array(int length) {
+        Uint16Array create = Uint16Array.create(length);
+        return (Uint16ArrayWrapper)create;
+    }
+
+    public static Uint8ArrayWrapper createUint16Array(ArrayBufferWrapper buffer, int offset) {
+        ArrayBuffer arrayBuffer = (ArrayBuffer)buffer;
+        return (Uint8ArrayWrapper)Uint16Array.create(arrayBuffer, offset);
+    }
+
     public static Uint16ArrayWrapper createUint16Array(ArrayBufferWrapper buffer, int offset, int length) {
         ArrayBuffer arrayBuffer = (ArrayBuffer)buffer;
         return (Uint16ArrayWrapper)Uint16Array.create(arrayBuffer, offset, length);
@@ -155,83 +163,204 @@ public class TypedArrays {
         return Uint32ArrayWrapper.create(length);
     }
 
+    public static Uint32ArrayWrapper createUFloat32Array(int length) {
+        return Uint32ArrayWrapper.create(length);
+    }
+
     public static Uint32ArrayWrapper createUint32Array(ArrayBufferWrapper buffer, int offset, int length) {
         ArrayBuffer arrayBuffer = (ArrayBuffer)buffer;
         return Uint32ArrayWrapper.create(arrayBuffer, offset, length);
     }
 
-    @JSBody(params = { "array" }, script = "return new $rt_byteArrayCls(array);")
-    private static native Object toByteArrayInternal(ArrayBufferViewWrapper array);
 
     // Obtain the array reference from ArrayBufferView
     public static byte[] toByteArray(ArrayBufferViewWrapper array) {
-        Object arrayObj = TypedArrays.toByteArrayInternal(array);
-        byte[] byteArray = (byte[])arrayObj;
-        return byteArray;
+        Int8Array intArray = new Int8Array((ArrayBufferView)array);
+        int length = intArray.getLength();
+        byte[] newByte = new byte[length];
+
+        for(int i = 0; i < length; i++) {
+            newByte[i] = intArray.get(i);
+        }
+        return newByte;
+
+//        byte[] byteArray = TypedArrays.toByteArrayInternal(array);
+//        return byteArray;
     }
 
-    public static ArrayBufferViewWrapper getTypedArray(Buffer buffer) {
-        if(buffer instanceof HasArrayBufferView) {
-            return ((HasArrayBufferView)buffer).getArrayBufferView();
+    public static ArrayBufferViewWrapper getTypedArray(boolean isUnsigned, Buffer buffer) {
+        if(buffer instanceof ByteBuffer) {
+            if(isUnsigned) {
+                return getUTypedArray((ByteBuffer)buffer);
+            }
+            else {
+                return getTypedArray((ByteBuffer)buffer);
+            }
         }
-        else {
-            throw new GdxRuntimeException("Buffer should have ArrayBufferView interface");
+        else if(buffer instanceof ShortBuffer) {
+            if(isUnsigned) {
+                return getUTypedArray((ShortBuffer)buffer);
+            }
+            else {
+                return getTypedArray((ShortBuffer)buffer);
+            }
         }
+        else if(buffer instanceof IntBuffer) {
+            return getTypedArray((IntBuffer)buffer);
+        }
+        else if(buffer instanceof FloatBuffer) {
+            return getTypedArray((FloatBuffer)buffer);
+        }
+        throw new GdxRuntimeException("No support for buffer " + buffer.getClass());
     }
 
     public static Int8ArrayWrapper getTypedArray(ByteBuffer buffer) {
-        if(buffer instanceof HasArrayBufferView) {
-            return (Int8ArrayWrapper)((HasArrayBufferView)buffer).getArrayBufferView();
+//        byte[] array = buffer.array();
+//        int remaining = array.length;
+//
+//        Int8ArrayWrapper typedArray = createInt8Array(remaining);
+//        for(int i = 0; i < remaining; i++) {
+//            typedArray.set(i, array[i]);
+//        }
+//        return typedArray;
+//        int byteOffset = arrayBuffer.getByteOffset() + buffer.position();
+//        int remaining = buffer.remaining();
+//        arrayBuffer = TypedArrays.createUint8Array(arrayBuffer.getBuffer(), byteOffset, remaining);
+
+//        if(buffer instanceof HasArrayBufferView) {
+//            return (Int8ArrayWrapper)((HasArrayBufferView)buffer).getArrayBufferView();
+//        }
+//        else {
+//            throw new GdxRuntimeException("Buffer should have ArrayBufferView interface");
+//        }
+
+        Int8ArrayWrapper typeArray = TypedArrays.createInt8Array(buffer.remaining());
+        for(int i = buffer.position(), j = 0; i < buffer.limit(); i++, j++) {
+            typeArray.set(j, buffer.get(i));
         }
-        else {
-            throw new GdxRuntimeException("Buffer should have ArrayBufferView interface");
+        return typeArray.subarray(0, buffer.remaining());
+    }
+
+    public static Uint8ArrayWrapper getUTypedArray(ByteBuffer buffer) {
+//        byte[] array = buffer.array();
+//        Int8Array jsArray = new Int8Array(array.length);
+//        for(int i = 0; i < array.length; i++) {
+//            byte value = array[i];
+//            jsArray.set(i, value);
+//        }
+//        return (ArrayBufferViewWrapper)jsArray;
+
+
+//        if(buffer instanceof HasArrayBufferView) {
+//            return (Int8ArrayWrapper)((HasArrayBufferView)buffer).getArrayBufferView();
+//        }
+//        else {
+//            throw new GdxRuntimeException("Buffer should have ArrayBufferView interface");
+//        }
+
+        Uint8ArrayWrapper typeArray = TypedArrays.createUint8Array(buffer.remaining());
+        for(int i = buffer.position(), j = 0; i < buffer.limit(); i++, j++) {
+            typeArray.set(j, buffer.get(i));
         }
+        return typeArray.subarray(0, buffer.remaining());
     }
 
     public static Int16ArrayWrapper getTypedArray(ShortBuffer buffer) {
-        if(buffer instanceof HasArrayBufferView) {
-            return (Int16ArrayWrapper)((HasArrayBufferView)buffer).getArrayBufferView();
+//        int position = buffer.position();
+//        int remaining = buffer.remaining();
+//        short[] array = buffer.array();
+//        Int16ArrayWrapper typedArray = createInt16Array(remaining);
+//        for(int i = 0; i < remaining; i++) {
+//            int pos = position;
+//            position++;
+//            typedArray.set(i, array[pos]);
+//        }
+//        return typedArray;
+
+//        if(buffer instanceof HasArrayBufferView) {
+//            return (Int16ArrayWrapper)((HasArrayBufferView)buffer).getArrayBufferView();
+//        }
+//        else {
+//            throw new GdxRuntimeException("Buffer should have ArrayBufferView interface");
+//        }
+
+        Int16ArrayWrapper typeArray = TypedArrays.createInt16Array(buffer.remaining());
+        for(int i = buffer.position(), j = 0; i < buffer.limit(); i++, j++) {
+            typeArray.set(j, buffer.get(i));
         }
-        else {
-            throw new GdxRuntimeException("Buffer should have ArrayBufferView interface");
+        return typeArray.subarray(0, buffer.remaining());
+    }
+
+    public static Uint16ArrayWrapper getUTypedArray(ShortBuffer buffer) {
+//        short[] array = buffer.array();
+//        Uint16ArrayWrapper typedArray = createUint16Array(array.length);
+//        for(int i = 0; i < array.length; i++) {
+//            typedArray.set(i, array[i]);
+//        }
+//        return typedArray;
+
+        Uint16ArrayWrapper typeArray = TypedArrays.createUint16Array(buffer.remaining());
+        for(int i = buffer.position(), j = 0; i < buffer.limit(); i++, j++) {
+            typeArray.set(j, buffer.get(i));
         }
+        return typeArray.subarray(0, buffer.remaining());
     }
 
     public static Int32ArrayWrapper getTypedArray(IntBuffer buffer) {
-        if(buffer instanceof HasArrayBufferView) {
-            return (Int32ArrayWrapper)((HasArrayBufferView)buffer).getArrayBufferView();
+//        int position = buffer.position();
+//        int remaining = buffer.remaining();
+//        int[] array = buffer.array();
+//        Int32ArrayWrapper typedArray = createInt32Array(remaining);
+//        for(int i = 0; i < remaining; i++) {
+//            int pos = position;
+//            position++;
+//            typedArray.set(i, array[pos]);
+//        }
+//        return typedArray;
+
+//        if(buffer instanceof HasArrayBufferView) {
+//            return (Int32ArrayWrapper)((HasArrayBufferView)buffer).getArrayBufferView();
+//        }
+//        else {
+//            throw new GdxRuntimeException("Buffer should have ArrayBufferView interface");
+//        }
+
+        Int32ArrayWrapper typeArray = TypedArrays.createInt32Array(buffer.remaining());
+        for(int i = buffer.position(), j = 0; i < buffer.limit(); i++, j++) {
+            typeArray.set(j, buffer.get(i));
         }
-        else {
-            throw new GdxRuntimeException("Buffer should have ArrayBufferView interface");
-        }
+        return typeArray.subarray(0, buffer.remaining());
     }
 
     public static Float32ArrayWrapper getTypedArray(FloatBuffer buffer) {
-        if(buffer instanceof HasArrayBufferView) {
-            return (Float32ArrayWrapper)((HasArrayBufferView)buffer).getArrayBufferView();
+//        int position = buffer.position();
+//        int remaining = buffer.remaining();
+//        float[] array = buffer.array();
+//        Float32ArrayWrapper typedArray = createFloat32Array(remaining);
+//        for(int i = 0; i < remaining; i++) {
+//            int pos = position;
+//            position++;
+//            typedArray.set(i, array[pos]);
+//        }
+//        return typedArray;
+//        if(buffer instanceof HasArrayBufferView) {
+//            return (Float32ArrayWrapper)((HasArrayBufferView)buffer).getArrayBufferView();
+//        }
+//        else {
+//            throw new GdxRuntimeException("Buffer should have ArrayBufferView interface");
+//        }
+
+        Float32ArrayWrapper typeArray = TypedArrays.createFloat32Array(buffer.remaining());
+        for(int i = buffer.position(), j = 0; i < buffer.limit(); i++, j++) {
+            typeArray.set(j, buffer.get(i));
         }
-        else {
-            throw new GdxRuntimeException("Buffer should have ArrayBufferView interface");
-        }
+        return typeArray.subarray(0, buffer.remaining());
     }
 
-    @JSBody(params = {"buffer"}, script = "" +
-            "return buffer;")
-    public static native Int8ArrayWrapper getTypedArray(@JSByRef() byte[] buffer);
+    @JSBody(params = { "array" }, script = "return array;")
+    private static native byte[] toByteArrayInternal(ArrayBufferViewWrapper array);
 
     @JSBody(params = {"buffer"}, script = "" +
             "return buffer;")
-    public static native Int32ArrayWrapper getTypedArray(@JSByRef() int[] buffer);
-
-    @JSBody(params = {"buffer"}, script = "" +
-            "return buffer;")
-    public static native Int16ArrayWrapper getTypedArray(@JSByRef() short[] buffer);
-
-    @JSBody(params = {"buffer"}, script = "" +
-            "return buffer;")
-    public static native Float32ArrayWrapper getTypedArray(@JSByRef() float[] buffer);
-
-    @org.teavm.jso.JSBody(params = {"array"}, script = "" +
-            "return array.data;")
-    public static native Int8ArrayWrapper getArrayBufferView(JSObject array);
+    public static native Int8Array getTypedByteArray(byte[] buffer);
 }

@@ -3,11 +3,14 @@ package com.badlogic.gdx.graphics.g2d;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.GdxRuntimeException;
+import com.github.xpenatan.gdx.backends.teavm.dom.typedarray.Int32ArrayWrapper;
+import com.github.xpenatan.gdx.backends.teavm.dom.typedarray.Int8ArrayWrapper;
 import com.github.xpenatan.gdx.backends.teavm.dom.typedarray.Uint8ArrayWrapper;
 import com.github.xpenatan.gdx.backends.teavm.gen.Emulate;
 import java.io.InputStream;
 import org.teavm.jso.JSBody;
-import org.teavm.jso.JSByRef;
+import org.teavm.jso.typedarrays.Int32Array;
+import org.teavm.jso.typedarrays.Int8Array;
 
 @Emulate(Gdx2DPixmap.class)
 public class Gdx2DPixmapEmu implements Disposable {
@@ -61,16 +64,16 @@ public class Gdx2DPixmapEmu implements Disposable {
     int width;
     int height;
     int format;
-    int[] nativeData = new int[4];
+    Int32ArrayWrapper nativeData = (Int32ArrayWrapper)new Int32Array(4);
 
     Uint8ArrayWrapper pixelPtr;
 
     public Gdx2DPixmapEmu(byte[] encodedData, int offset, int len, int requestedFormat) {
         pixelPtr = load(nativeData, encodedData, offset, len);
-        basePtr = nativeData[0];
-        width = nativeData[1];
-        height = nativeData[2];
-        format = nativeData[3];
+        basePtr = nativeData.get(0);
+        width = nativeData.get(1);
+        height = nativeData.get(2);
+        format = nativeData.get(3);
         if(requestedFormat != 0 && requestedFormat != format) {
             convert(requestedFormat);
         }
@@ -81,10 +84,10 @@ public class Gdx2DPixmapEmu implements Disposable {
      */
     public Gdx2DPixmapEmu(int width, int height, int format) throws GdxRuntimeException {
         pixelPtr = newPixmap(nativeData, width, height, format);
-        this.basePtr = nativeData[0];
-        this.width = nativeData[1];
-        this.height = nativeData[2];
-        this.format = nativeData[3];
+        this.basePtr = nativeData.get(0);
+        this.width = nativeData.get(1);
+        this.height = nativeData.get(2);
+        this.format = nativeData.get(3);
     }
 
 //    public Gdx2DPixmapEmu(ByteBuffer encodedData, int offset, int len, int requestedFormat) throws IOException {
@@ -301,7 +304,7 @@ public class Gdx2DPixmapEmu implements Disposable {
             "var newArray = new Uint8Array(heapArray);" +
             "return newArray;"
     )
-    private static native Uint8ArrayWrapper load(@JSByRef() int[] nativeData, @JSByRef() byte[] buffer, int offset, int len); /*MANUAL
+    private static native Uint8ArrayWrapper load(Int32ArrayWrapper nativeData, byte[] buffer, int offset, int len); /*MANUAL
         const unsigned char* p_buffer = (const unsigned char*)env->GetPrimitiveArrayCritical(buffer, 0);
         gdx2d_pixmap* pixmap = gdx2d_load(p_buffer + offset, len);
         env->ReleasePrimitiveArrayCritical(buffer, (char*)p_buffer, 0);
@@ -338,7 +341,7 @@ public class Gdx2DPixmapEmu implements Disposable {
             "var newArray = Gdx.HEAPU8.subarray(startIndex, endIndex);" +
             "return newArray;"
     )
-    private static native Uint8ArrayWrapper newPixmap(@JSByRef() int[] nativeData, int width, int height, int format); /*MANUAL
+    private static native Uint8ArrayWrapper newPixmap(Int32ArrayWrapper nativeData, int width, int height, int format); /*MANUAL
         gdx2d_pixmap* pixmap = gdx2d_new(width, height, format);
         if(pixmap==0)
             return 0;

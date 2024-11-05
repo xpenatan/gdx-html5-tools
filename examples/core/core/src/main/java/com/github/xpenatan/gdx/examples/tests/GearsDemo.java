@@ -24,6 +24,9 @@ import com.badlogic.gdx.graphics.g3d.utils.DefaultShaderProvider;
 import com.badlogic.gdx.graphics.g3d.utils.MeshPartBuilder;
 import com.badlogic.gdx.graphics.g3d.utils.MeshPartBuilder.VertexInfo;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
+import com.badlogic.gdx.graphics.profiling.GL20Interceptor;
+import com.badlogic.gdx.graphics.profiling.GLErrorListener;
+import com.badlogic.gdx.graphics.profiling.GLProfiler;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
@@ -61,10 +64,20 @@ public class GearsDemo implements ApplicationListener {
     long time;
     int fps;
 
-    CameraInputController cameraController;
+//    CameraInputController cameraController;
+
 
     @Override
     public void create() {
+        GLProfiler glProfiler = new GLProfiler(Gdx.graphics);
+        glProfiler.enable();
+        glProfiler.setListener(new GLErrorListener() {
+            @Override
+            public void onError(int error) {
+                int i = 9464564;
+                System.out.println(i);
+            }
+        });
 
         String runtime = System.getProperty("java.runtime.name");
         String osName = System.getProperty("os.name");
@@ -100,12 +113,12 @@ public class GearsDemo implements ApplicationListener {
         cam.far = 100f;
         cam.update();
 
-        cameraController = new CameraInputController(cam);
-        cameraController.autoUpdate = false;
-        cameraController.forwardTarget = false;
-        cameraController.translateTarget = false;
+//        cameraController = new CameraInputController(cam);
+//        cameraController.autoUpdate = false;
+//        cameraController.forwardTarget = false;
+//        cameraController.translateTarget = false;
 
-        Gdx.input.setInputProcessor(new InputMultiplexer(cameraController));
+//        Gdx.input.setInputProcessor(new InputMultiplexer(cameraController));
 
         time = TimeUtils.millis();
 

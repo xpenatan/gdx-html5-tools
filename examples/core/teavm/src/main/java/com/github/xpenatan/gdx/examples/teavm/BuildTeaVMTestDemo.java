@@ -6,16 +6,21 @@ import com.github.xpenatan.gdx.backends.teavm.config.TeaBuilder;
 import com.github.xpenatan.gdx.backends.teavm.config.plugins.TeaReflectionSupplier;
 import com.github.xpenatan.gdx.backends.teavm.gen.SkipClass;
 import com.github.xpenatan.gdx.examples.teavm.launcher.TeaVMTestLauncher;
+import com.github.xpenatan.gdx.examples.tests.ReflectionTest;
 import java.io.File;
 import java.io.IOException;
+import org.teavm.tooling.TeaVMSourceFilePolicy;
+import org.teavm.tooling.TeaVMTargetType;
 import org.teavm.tooling.TeaVMTool;
 
 @SkipClass
 public class BuildTeaVMTestDemo {
 
     public static void main(String[] args) throws IOException {
-        String reflectionPackage = "com.badlogic.gdx.math";
-        TeaReflectionSupplier.addReflectionClass(reflectionPackage);
+//        String reflectionPackage = "com.badlogic.gdx.math";
+//        TeaReflectionSupplier.addReflectionClass(reflectionPackage);
+        TeaReflectionSupplier.addReflectionClass(ReflectionTest.A.class);
+        TeaReflectionSupplier.addReflectionClass(ReflectionTest.B.class);
 
         TeaBuildConfiguration teaBuildConfiguration = new TeaBuildConfiguration();
         teaBuildConfiguration.assetsPath.add(new AssetFileHandle("../assets"));
