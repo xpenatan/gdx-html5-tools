@@ -2,7 +2,6 @@ package com.badlogic.gdx.utils.reflect;
 
 import com.badlogic.gdx.utils.reflect.gen.ClassGen;
 import com.badlogic.gdx.utils.reflect.gen.ClassProxy;
-import com.badlogic.gdx.utils.reflect.gen.FieldGen;
 import com.badlogic.gdx.utils.reflect.gen.FieldProxy;
 import com.github.xpenatan.gdx.backends.teavm.gen.Emulate;
 import java.lang.reflect.Modifier;
@@ -139,64 +138,30 @@ public final class ClassReflectionEmu {
     /**
      * Returns an array of {@link Constructor} containing the public constructors of the class represented by the supplied Class.
      */
-    static public Constructor[] getConstructors(Class c) {
-//        java.lang.reflect.Constructor[] constructors = c.getConstructors();
-//        Constructor[] result = new Constructor[constructors.length];
-//        for(int i = 0, j = constructors.length; i < j; i++) {
-//            result[i] = new Constructor(constructors[i]);
-//        }
-//        return result;
-        return null;
+    static public ConstructorEmu[] getConstructors(Class c) {
+        ConstructorEmu[] constructors = new ConstructorEmu[1];
+        constructors[0] = new ConstructorEmu(c);
+        return constructors;
     }
 
-    static private Constructor getNoArgPublicConstructor(Class c) {
-        java.lang.reflect.Constructor[] constructors = c.getConstructors();
-        if(constructors.length > 0)
-            return new Constructor(constructors[0]);
-        return null;
+    static private ConstructorEmu getNoArgPublicConstructor(Class c) {
+        return new ConstructorEmu(c);
     }
 
     /**
      * Returns a {@link Constructor} that represents the public constructor for the supplied class which takes the supplied
      * parameter types.
      */
-    static public Constructor getConstructor(Class c, Class... parameterTypes) throws ReflectionException {
-
-//        if(parameterTypes == null || parameterTypes.length == 0) {
-//            //Teavm does not accept null parameter to get public no args constructor. Need to do it manually
-//            return getNoArgPublicConstructor(c);
-//        }
-//
-//        try {
-//            java.lang.reflect.Constructor constructor = c.getConstructor(parameterTypes);
-//            return new Constructor(constructor);
-//        }
-//        catch(SecurityException e) {
-//            throw new ReflectionException("Security violation occurred while getting constructor for class: '" + c.getName() + "'.",
-//                    e);
-//        }
-//        catch(NoSuchMethodException e) {
-//            throw new ReflectionException("Constructor not found for class: " + c.getName(), e);
-//        }
-        return null;
+    static public ConstructorEmu getConstructor(Class c, Class... parameterTypes) throws ReflectionException {
+        return new ConstructorEmu(c);
     }
 
     /**
      * Returns a {@link Constructor} that represents the constructor for the supplied class which takes the supplied parameter
      * types.
      */
-    static public Constructor getDeclaredConstructor(Class c, Class... parameterTypes) throws ReflectionException {
-//        try {
-//            java.lang.reflect.Constructor declaredConstructor = c.getDeclaredConstructor(parameterTypes);
-//            return new Constructor(declaredConstructor);
-//        }
-//        catch(SecurityException e) {
-//            throw new ReflectionException("Security violation while getting constructor for class: " + c.getName(), e);
-//        }
-//        catch(NoSuchMethodException e) {
-//            throw new ReflectionException("Constructor not found for class: " + c.getName(), e);
-//        }
-        return null;
+    static public ConstructorEmu getDeclaredConstructor(Class c, Class... parameterTypes) throws ReflectionException {
+        return new ConstructorEmu(c);
     }
 
     /**

@@ -21,10 +21,6 @@ import org.teavm.metaprogramming.reflect.ReflectMethod;
 @CompileTime
 public class ClassGen {
 
-    private static Diagnostics diagnostics = Metaprogramming.getDiagnostics();
-    private static ClassLoader classLoader = Metaprogramming.getClassLoader();
-    private static GenericTypeProvider genericTypeProvider = new GenericTypeProvider(classLoader);
-
     @Meta
     public static native Object createInstance(Class<?> cls);
     private static void createInstance(ReflectClass<?> cls) {
@@ -93,6 +89,7 @@ public class ClassGen {
         Value<ClassProxy> proxy = Metaprogramming.proxy(ClassProxy.class, (instance, method, args) -> {
             String methodName = method.getName();
             String className = cls.getName();
+            GenericTypeProvider genericTypeProvider = new GenericTypeProvider(Metaprogramming.getClassLoader());
             if(methodName.equals("getField")) {
                 Value<Object> arg = Metaprogramming.lazy(() -> args[0]);
                 Value<FieldProxy> result = Metaprogramming.lazy(() -> null);

@@ -6,7 +6,22 @@ import com.github.xpenatan.gdx.backends.teavm.gen.Emulate;
 @Emulate(ArrayReflection.class)
 public class ArrayReflectionEmu {
 
+    static private Object internalInstance(Class c, int size) {
+        if(c == Object.class) { return new Object[size]; }
+        if(c == String.class) { return new String[size]; }
+        if(c == int[].class) { return new int[size]; }
+        if(c == float[].class) { return new float[size]; }
+        if(c == short[].class) { return new short[size]; }
+        if(c == boolean[].class) { return new boolean[size]; }
+
+        return null;
+    }
+
     static public Object newInstance(Class c, int size) {
+        Object o = internalInstance(c, size);
+        if(o != null) {
+            return o;
+        }
         Object arrayInstance = ClassGen.createArrayInstance(c, size);
         return arrayInstance;
     }

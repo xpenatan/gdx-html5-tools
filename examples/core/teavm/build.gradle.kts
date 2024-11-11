@@ -40,19 +40,19 @@ tasks.register("core-run-teavm") {
 
 val generatedCSources = File(buildDir, "dist/webapp/teavm")
 
-teavm {
-    js {
-        sourceMap = true
-        debugInformation = true
-        sourceFilePolicy = SourceFilePolicy.COPY
-        addedToWebApp = true
-        mainClass = "com.github.xpenatan.gdx.examples.teavm.launcher.TeaVMTestLauncher"
-    }
-    wasmGC {
-        sourceMap = true
-        debugInformation = true
-        sourceFilePolicy = SourceFilePolicy.COPY
-        addedToWebApp = false
-        mainClass = "com.github.xpenatan.gdx.examples.teavm.launcher.TeaVMTestLauncher"
-    }
-}
+//teavm {
+//    js {
+//        sourceMap = true
+//        debugInformation = true
+//        sourceFilePolicy = SourceFilePolicy.COPY
+//        addedToWebApp = true
+//        mainClass = "com.github.xpenatan.gdx.examples.teavm.launcher.TeaVMTestLauncher"
+//    }
+//    wasmGC {
+//        sourceMap = true
+//        debugInformation = true
+//        sourceFilePolicy = SourceFilePolicy.COPY
+//        addedToWebApp = false
+//        mainClass = "com.github.xpenatan.gdx.examples.teavm.launcher.TeaVMTestLauncher"
+//    }
+//}

@@ -91,6 +91,15 @@ public class TeaBuilder {
         return config(tool, configuration);
     }
 
+    private static boolean isClass(String name) {
+        try {
+            Class<?> aClass = Class.forName(name);
+            return aClass.getModifiers() != 0;
+        } catch(ClassNotFoundException e) {
+        }
+        return false;
+    }
+
     public static TeaVMTool config(TeaVMTool tool, TeaBuildConfiguration configuration, TeaProgressListener progressListener) {
         ArrayList<URL> acceptedURL = new ArrayList<>();
         ArrayList<URL> notAcceptedURL = new ArrayList<>();
@@ -108,12 +117,7 @@ public class TeaBuilder {
 
         for(int i = 0; i < reflectionsCls.size(); i++) {
             String packageOrClass = reflectionsCls.get(i);
-            boolean isClass = false;
-            try {
-                Class.forName(packageOrClass);
-                isClass = true;
-            } catch(ClassNotFoundException e) {
-            }
+            boolean isClass = isClass(packageOrClass);
 
             if(isClass) {
                 TeaReflectionSupplier.addReflectionClass(packageOrClass);
@@ -131,7 +135,14 @@ public class TeaBuilder {
                     try {
                         boolean assignableFrom = Object.class.isAssignableFrom(Class.forName(className));
                         if(assignableFrom) {
-                            TeaReflectionSupplier.addReflectionClass(className);
+                            if(isClass(className)) {
+                                TeaReflectionSupplier.addReflectionClass(className);
+                                Class<?>[] classes = Class.forName(className).getClasses();
+                                for(int j = 0; j < classes.length; j++) {
+                                    Class<?> aClass = classes[j];
+                                    TeaReflectionSupplier.addReflectionClass(aClass);
+                                }
+                            }
                         }
                     } catch(ClassNotFoundException e) {
                         throw new RuntimeException(e);
@@ -139,7 +150,7 @@ public class TeaBuilder {
                 }
             }
         }
-
+//        "com.badlogic.gdx.scenes.scene2d.ui.Skin$TintedDrawable"
         TeaBuilder.log("");
         TeaBuilder.log("targetDirectory: " + webappDirectory);
         TeaBuilder.log("");
