@@ -1,4 +1,4 @@
-package com.badlogic.gdx.utils.reflect.gen;
+package com.badlogic.gdx.utils.reflectNew.gen;
 
 public interface FieldProxy {
     Class getType();

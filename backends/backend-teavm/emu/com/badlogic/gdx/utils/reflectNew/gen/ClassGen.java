@@ -1,16 +1,14 @@
-package com.badlogic.gdx.utils.reflect.gen;
+package com.badlogic.gdx.utils.reflectNew.gen;
 
 import com.badlogic.gdx.utils.reflect.ArrayReflection;
 import com.github.xpenatan.gdx.backends.teavm.config.plugins.TeaReflectionSupplier;
 import com.github.xpenatan.gdx.backends.teavm.utils.GenericTypeProvider;
 import java.lang.reflect.Field;
 import java.lang.reflect.GenericArrayType;
-import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import org.teavm.metaprogramming.CompileTime;
-import org.teavm.metaprogramming.Diagnostics;
 import org.teavm.metaprogramming.Meta;
 import org.teavm.metaprogramming.Metaprogramming;
 import org.teavm.metaprogramming.ReflectClass;

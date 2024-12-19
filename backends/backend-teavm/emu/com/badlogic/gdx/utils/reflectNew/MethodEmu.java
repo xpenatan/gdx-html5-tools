@@ -1,10 +1,10 @@
-package com.badlogic.gdx.utils.reflect;
+package com.badlogic.gdx.utils.reflectNew;
 
-import com.github.xpenatan.gdx.backends.teavm.gen.Emulate;
+import com.badlogic.gdx.utils.reflect.ReflectionException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
 
-@Emulate(Method.class)
+//@Emulate(Method.class)
 public class MethodEmu {
 
     private final java.lang.reflect.Method method;

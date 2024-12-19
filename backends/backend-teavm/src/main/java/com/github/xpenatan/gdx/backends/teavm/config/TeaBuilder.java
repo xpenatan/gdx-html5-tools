@@ -150,7 +150,6 @@ public class TeaBuilder {
                 }
             }
         }
-//        "com.badlogic.gdx.scenes.scene2d.ui.Skin$TintedDrawable"
         TeaBuilder.log("");
         TeaBuilder.log("targetDirectory: " + webappDirectory);
         TeaBuilder.log("");
