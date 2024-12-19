@@ -2,6 +2,7 @@
 - Add Config Asset preloadListener
 - Update AssetLoader and AssetDownloader
 - Add AssetInstance to obtain AssetLoader or AssetDownloader
+- Update Freetype emulation to fix build errors
 
 [1.0.4]
 - Fix music id
