@@ -39,7 +39,7 @@ public final class FieldEmu {
         return elementType;
     }
 
-    public boolean isAnnotationPresent(Class<? extends Annotation> annotationType) {
+    public boolean isAnnotationPresent(Class<? extends AnnotationEmu> annotationType) {
         return false;
     }
 

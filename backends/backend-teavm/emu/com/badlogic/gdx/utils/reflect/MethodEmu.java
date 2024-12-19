@@ -137,23 +137,23 @@ public class MethodEmu {
         return method.isAnnotationPresent(annotationType);
     }
 
-    public Annotation[] getDeclaredAnnotations() {
+    public AnnotationEmu[] getDeclaredAnnotations() {
         java.lang.annotation.Annotation[] annotations = method.getDeclaredAnnotations();
-        Annotation[] result = new Annotation[annotations.length];
+        AnnotationEmu[] result = new AnnotationEmu[annotations.length];
         for(int i = 0; i < annotations.length; i++) {
-            result[i] = new Annotation(annotations[i]);
+            result[i] = new AnnotationEmu(annotations[i]);
         }
         return result;
     }
 
-    public Annotation getDeclaredAnnotation(Class<? extends java.lang.annotation.Annotation> annotationType) {
+    public AnnotationEmu getDeclaredAnnotation(Class<? extends java.lang.annotation.Annotation> annotationType) {
         java.lang.annotation.Annotation[] annotations = method.getDeclaredAnnotations();
         if(annotations == null) {
             return null;
         }
         for(java.lang.annotation.Annotation annotation : annotations) {
             if(annotation.annotationType().equals(annotationType)) {
-                return new Annotation(annotation);
+                return new AnnotationEmu(annotation);
             }
         }
         return null;

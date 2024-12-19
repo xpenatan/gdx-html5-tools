@@ -294,50 +294,50 @@ public final class ClassReflectionEmu {
     }
 
     /**
-     * Returns an array of {@link Annotation} objects reflecting all annotations declared by the supplied class, and inherited
+     * Returns an array of {@link AnnotationEmu} objects reflecting all annotations declared by the supplied class, and inherited
      * from its superclass. Returns an empty array if there are none.
      */
-    static public Annotation[] getAnnotations(Class c) {
+    static public AnnotationEmu[] getAnnotations(Class c) {
         java.lang.annotation.Annotation[] annotations = c.getAnnotations();
-        Annotation[] result = new Annotation[annotations.length];
+        AnnotationEmu[] result = new AnnotationEmu[annotations.length];
         for(int i = 0; i < annotations.length; i++) {
-            result[i] = new Annotation(annotations[i]);
+            result[i] = new AnnotationEmu(annotations[i]);
         }
         return result;
     }
 
     /**
-     * Returns an {@link Annotation} object reflecting the annotation provided, or null of this class doesn't have, or doesn't
+     * Returns an {@link AnnotationEmu} object reflecting the annotation provided, or null of this class doesn't have, or doesn't
      * inherit, such an annotation. This is a convenience function if the caller knows already which annotation type he's looking
      * for.
      */
-    static public Annotation getAnnotation(Class c, Class<? extends java.lang.annotation.Annotation> annotationType) {
+    static public AnnotationEmu getAnnotation(Class c, Class<? extends java.lang.annotation.Annotation> annotationType) {
         java.lang.annotation.Annotation annotation = c.getAnnotation(annotationType);
-        if(annotation != null) return new Annotation(annotation);
+        if(annotation != null) return new AnnotationEmu(annotation);
         return null;
     }
 
     /**
-     * Returns an array of {@link Annotation} objects reflecting all annotations declared by the supplied class, or an empty
+     * Returns an array of {@link AnnotationEmu} objects reflecting all annotations declared by the supplied class, or an empty
      * array if there are none. Does not include inherited annotations.
      */
-    static public Annotation[] getDeclaredAnnotations(Class c) {
+    static public AnnotationEmu[] getDeclaredAnnotations(Class c) {
         java.lang.annotation.Annotation[] annotations = c.getDeclaredAnnotations();
-        Annotation[] result = new Annotation[annotations.length];
+        AnnotationEmu[] result = new AnnotationEmu[annotations.length];
         for(int i = 0; i < annotations.length; i++) {
-            result[i] = new Annotation(annotations[i]);
+            result[i] = new AnnotationEmu(annotations[i]);
         }
         return result;
     }
 
     /**
-     * Returns an {@link Annotation} object reflecting the annotation provided, or null of this class doesn't have such an
+     * Returns an {@link AnnotationEmu} object reflecting the annotation provided, or null of this class doesn't have such an
      * annotation. This is a convenience function if the caller knows already which annotation type he's looking for.
      */
-    static public Annotation getDeclaredAnnotation(Class c, Class<? extends java.lang.annotation.Annotation> annotationType) {
+    static public AnnotationEmu getDeclaredAnnotation(Class c, Class<? extends java.lang.annotation.Annotation> annotationType) {
         java.lang.annotation.Annotation[] annotations = c.getDeclaredAnnotations();
         for(java.lang.annotation.Annotation annotation : annotations) {
-            if(annotation.annotationType().equals(annotationType)) return new Annotation(annotation);
+            if(annotation.annotationType().equals(annotationType)) return new AnnotationEmu(annotation);
         }
         return null;
     }

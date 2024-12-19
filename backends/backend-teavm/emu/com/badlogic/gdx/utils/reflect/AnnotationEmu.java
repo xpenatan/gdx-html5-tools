@@ -1,15 +1,18 @@
 package com.badlogic.gdx.utils.reflect;
 
+import com.github.xpenatan.gdx.backends.teavm.gen.Emulate;
+
 /**
  * Provides information about, and access to, an annotation of a field, class or interface.
  *
  * @author dludwig
  */
-public final class Annotation {
+@Emulate(Annotation.class)
+public final class AnnotationEmu {
 
     private java.lang.annotation.Annotation annotation;
 
-    Annotation(java.lang.annotation.Annotation annotation) {
+    AnnotationEmu(java.lang.annotation.Annotation annotation) {
         this.annotation = annotation;
     }
 
