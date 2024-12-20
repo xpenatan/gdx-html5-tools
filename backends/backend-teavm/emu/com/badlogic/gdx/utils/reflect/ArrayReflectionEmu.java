@@ -1,8 +1,9 @@
 package com.badlogic.gdx.utils.reflect;
 
 import com.badlogic.gdx.utils.reflect.gen.ClassGen;
+import com.github.xpenatan.gdx.backends.teavm.gen.Emulate;
 
-//@Emulate(ArrayReflection.class)
+@Emulate(ArrayReflection.class)
 public class ArrayReflectionEmu {
 
     static private Object internalInstance(Class c, int size) {
