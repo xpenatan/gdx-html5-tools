@@ -1,6 +1,5 @@
-package com.badlogic.gdx.utils.reflectNew;
+package com.badlogic.gdx.utils.reflect;
 
-import com.badlogic.gdx.utils.reflect.ReflectionException;
 import com.github.xpenatan.gdx.backends.teavm.gen.Emulate;
 
 @Emulate(com.badlogic.gdx.utils.reflect.Constructor.class)

@@ -1,4 +1,4 @@
-package com.badlogic.gdx.utils.reflectNew;
+package com.badlogic.gdx.utils.reflect;
 
 import com.github.xpenatan.gdx.backends.teavm.gen.Emulate;
 import java.lang.annotation.Annotation;

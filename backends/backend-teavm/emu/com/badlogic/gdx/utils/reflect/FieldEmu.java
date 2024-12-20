@@ -1,7 +1,7 @@
-package com.badlogic.gdx.utils.reflectNew;
+package com.badlogic.gdx.utils.reflect;
 
-import com.badlogic.gdx.utils.reflectNew.gen.ClassGen;
-import com.badlogic.gdx.utils.reflectNew.gen.FieldProxy;
+import com.badlogic.gdx.utils.reflect.gen.ClassGen;
+import com.badlogic.gdx.utils.reflect.gen.FieldProxy;
 import com.github.xpenatan.gdx.backends.teavm.gen.Emulate;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;

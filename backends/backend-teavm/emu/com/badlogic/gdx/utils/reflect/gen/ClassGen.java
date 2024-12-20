@@ -1,4 +1,4 @@
-package com.badlogic.gdx.utils.reflectNew.gen;
+package com.badlogic.gdx.utils.reflect.gen;
 
 import com.badlogic.gdx.utils.reflect.ArrayReflection;
 import com.github.xpenatan.gdx.backends.teavm.config.plugins.TeaReflectionSupplier;

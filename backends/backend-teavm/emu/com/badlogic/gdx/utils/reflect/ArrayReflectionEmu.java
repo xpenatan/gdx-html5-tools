@@ -1,6 +1,6 @@
-package com.badlogic.gdx.utils.reflectNew;
+package com.badlogic.gdx.utils.reflect;
 
-import com.badlogic.gdx.utils.reflectNew.gen.ClassGen;
+import com.badlogic.gdx.utils.reflect.gen.ClassGen;
 
 //@Emulate(ArrayReflection.class)
 public class ArrayReflectionEmu {
