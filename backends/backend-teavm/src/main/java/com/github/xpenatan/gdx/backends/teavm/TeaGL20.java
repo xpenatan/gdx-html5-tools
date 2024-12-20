@@ -811,10 +811,14 @@ public class TeaGL20 implements GL20 {
 
         if(type == WebGLRenderingContext.UNSIGNED_BYTE) {
             ArrayBufferViewWrapper arrayBuffer = TypedArrays.getTypedArray(true, pixels);
+            int byteOffset = arrayBuffer.getByteOffset() + pixels.position();
+            arrayBuffer = TypedArrays.createUint8Array(arrayBuffer.getBuffer(), byteOffset, pixels.remaining());
             gl.texImage2D(target, level, internalformat, width, height, border, format, type, arrayBuffer);
         }
         else if(type == WebGLRenderingContext.UNSIGNED_SHORT || type == GL_UNSIGNED_SHORT_5_6_5 || type == GL_UNSIGNED_SHORT_4_4_4_4) {
             ArrayBufferViewWrapper arrayBuffer = TypedArrays.getTypedArray(true, pixels);
+            int byteOffset = arrayBuffer.getByteOffset() + pixels.position();
+            arrayBuffer = TypedArrays.createUint16Array(arrayBuffer.getBuffer(), byteOffset, pixels.remaining());
             gl.texImage2D(target, level, internalformat, width, height, border, format, type, arrayBuffer);
         }
         else {
@@ -826,10 +830,14 @@ public class TeaGL20 implements GL20 {
     public void glTexSubImage2D(int target, int level, int xoffset, int yoffset, int width, int height, int format, int type, Buffer pixels) {
         if(type == WebGLRenderingContext.UNSIGNED_BYTE) {
             ArrayBufferViewWrapper arrayBuffer = TypedArrays.getTypedArray(true, pixels);
+            int byteOffset = arrayBuffer.getByteOffset() + pixels.position();
+            arrayBuffer = TypedArrays.createUint8Array(arrayBuffer.getBuffer(), byteOffset, pixels.remaining());
             gl.texSubImage2D(target, level, xoffset, yoffset, width, height, format, type, arrayBuffer);
         }
         else if(type == WebGLRenderingContext.UNSIGNED_SHORT || type == GL_UNSIGNED_SHORT_5_6_5 || type == GL_UNSIGNED_SHORT_4_4_4_4) {
             ArrayBufferViewWrapper arrayBuffer = TypedArrays.getTypedArray(true, pixels);
+            int byteOffset = arrayBuffer.getByteOffset() + pixels.position();
+            arrayBuffer = TypedArrays.createUint16Array(arrayBuffer.getBuffer(), byteOffset, pixels.remaining());
             gl.texSubImage2D(target, level, xoffset, yoffset, width, height, format, type, arrayBuffer);
         }
         else {
