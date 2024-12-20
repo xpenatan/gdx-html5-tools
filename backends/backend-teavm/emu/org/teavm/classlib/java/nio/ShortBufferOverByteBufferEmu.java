@@ -22,33 +22,33 @@ public abstract class ShortBufferOverByteBufferEmu extends TShortBufferOverByteB
         super(start, capacity, byteBuffer, position, limit, readOnly);
     }
 
-    @Override
-    @Emulate
-    public ArrayBufferViewWrapper getArrayBufferView() {
-        // Int8Array
-        Int8ArrayWrapper int8Array = (Int8ArrayWrapper)getOriginalArrayBufferView();
-        int position1 = position();
-        int remaining1 = remaining();
-        int capacity1 = capacity();
-        if(positionCache != position1 || remainingCache != remaining1 || capacityCache != capacity1) {
-            shortArray = TypedArrays.createInt16Array(int8Array.getBuffer());
-            positionCache = position1;
-            remainingCache = remaining1;
-            capacityCache = capacity1;
-        }
-        return shortArray;
-    }
+//    @Override
+//    @Emulate
+//    public ArrayBufferViewWrapper getArrayBufferView() {
+//        // Int8Array
+//        Int8ArrayWrapper int8Array = (Int8ArrayWrapper)getOriginalArrayBufferView();
+//        int position1 = position();
+//        int remaining1 = remaining();
+//        int capacity1 = capacity();
+//        if(positionCache != position1 || remainingCache != remaining1 || capacityCache != capacity1) {
+//            shortArray = TypedArrays.createInt16Array(int8Array.getBuffer());
+//            positionCache = position1;
+//            remainingCache = remaining1;
+//            capacityCache = capacity1;
+//        }
+//        return shortArray;
+//    }
 
-    @Override
-    @Emulate
-    public ArrayBufferViewWrapper getOriginalArrayBufferView() {
-        HasArrayBufferView buff = (HasArrayBufferView)byteByffer;
-        return buff.getOriginalArrayBufferView();
-    }
-
-    @Override
-    @Emulate
-    public int getElementSize() {
-        return 2;
-    }
+//    @Override
+//    @Emulate
+//    public ArrayBufferViewWrapper getOriginalArrayBufferView() {
+//        HasArrayBufferView buff = (HasArrayBufferView)byteByffer;
+//        return buff.getOriginalArrayBufferView();
+//    }
+//
+//    @Override
+//    @Emulate
+//    public int getElementSize() {
+//        return 2;
+//    }
 }

@@ -13,24 +13,24 @@ public abstract class ByteBufferImplEmu extends TByteBufferImpl implements HasAr
         super(start, capacity, array, position, limit, direct, readOnly);
     }
 
-    @Override
-    @Emulate
-    public ArrayBufferViewWrapper getArrayBufferView() {
-        Int8ArrayWrapper int8Array = (Int8ArrayWrapper)getOriginalArrayBufferView();
-        return int8Array;
-    }
-
-    @Override
-    @Emulate
-    public ArrayBufferViewWrapper getOriginalArrayBufferView() {
-        Object array = array();
-        Int8ArrayWrapper int8Array = TypedArrays.getArrayBufferView((JSObject)array);
-        return int8Array;
-    }
-
-    @Override
-    @Emulate
-    public int getElementSize() {
-        return 1;
-    }
+//    @Override
+//    @Emulate
+//    public ArrayBufferViewWrapper getArrayBufferView() {
+//        Int8ArrayWrapper int8Array = (Int8ArrayWrapper)getOriginalArrayBufferView();
+//        return int8Array;
+//    }
+//
+//    @Override
+//    @Emulate
+//    public ArrayBufferViewWrapper getOriginalArrayBufferView() {
+//        Object array = array();
+//        Int8ArrayWrapper int8Array = TypedArrays.getArrayBufferView((JSObject)array);
+//        return int8Array;
+//    }
+//
+//    @Override
+//    @Emulate
+//    public int getElementSize() {
+//        return 1;
+//    }
 }
