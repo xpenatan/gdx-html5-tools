@@ -1,8 +1,9 @@
 package com.badlogic.gdx.utils.reflectNew;
 
 import com.badlogic.gdx.utils.reflect.ReflectionException;
+import com.github.xpenatan.gdx.backends.teavm.gen.Emulate;
 
-//@Emulate(Constructor.class)
+@Emulate(com.badlogic.gdx.utils.reflect.Constructor.class)
 public final class ConstructorEmu {
 
     private Class cls;

@@ -452,7 +452,7 @@ public class TeaBuilder {
         boolean setSourceMapsFileGenerated = false;
         boolean setSourceFilesCopied = false;
 
-        TeaVMTargetType targetType = TeaVMTargetType.JAVASCRIPT;
+        TeaVMTargetType targetType = TeaVMTargetType.WEBASSEMBLY_GC;
 
         File setTargetDirectory = new File(webappDirectory + File.separator + webappName + File.separator + "teavm");
         String setTargetFileName = "app.js";

@@ -1,25 +1,19 @@
 package com.badlogic.gdx.utils.reflectNew;
 
 import com.github.xpenatan.gdx.backends.teavm.gen.Emulate;
+import java.lang.annotation.Annotation;
 
-//@Emulate(Annotation.class)
+@Emulate(com.badlogic.gdx.utils.reflect.Annotation.class)
 public final class AnnotationEmu {
 
-    private java.lang.annotation.Annotation annotation;
-
-    AnnotationEmu(java.lang.annotation.Annotation annotation) {
-        this.annotation = annotation;
+    AnnotationEmu() {
     }
 
-    @SuppressWarnings("unchecked")
-    public <T extends java.lang.annotation.Annotation> T getAnnotation(Class<T> annotationType) {
-        if(annotation.annotationType().equals(annotationType)) {
-            return (T)annotation;
-        }
+    public <T extends Annotation> T getAnnotation(Class<T> annotationType) {
         return null;
     }
 
-    public Class<? extends java.lang.annotation.Annotation> getAnnotationType() {
-        return annotation.annotationType();
+    public Class<? extends Annotation> getAnnotationType() {
+        return null;
     }
 }
