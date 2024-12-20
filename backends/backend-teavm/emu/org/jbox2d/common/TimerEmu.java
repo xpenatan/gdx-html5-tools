@@ -1,4 +1,4 @@
-package emu.org.jbox2d.common;
+package org.jbox2d.common;
 
 import com.github.xpenatan.gdx.backends.teavm.gen.Emulate;
 import org.teavm.jso.JSBody;
