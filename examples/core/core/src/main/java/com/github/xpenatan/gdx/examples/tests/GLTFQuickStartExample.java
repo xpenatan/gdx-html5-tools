@@ -44,12 +44,14 @@ public class GLTFQuickStartExample extends ApplicationAdapter {
 
 //    AssetManager assetManager;
 
-    XGLProfiler profiler;
+//    XGLProfiler profiler;
 
     @Override
     public void create() {
-        profiler = new XGLProfiler(true);
-        profiler.enable();
+        long millis = TimeUtils.millis();
+
+//        profiler = new XGLProfiler(true);
+//        profiler.enable();
 //        assetManager = new AssetManager();
 //        Texture.setAssetManager(assetManager);
 //        assetManager.setLoader(SceneAsset.class, ".gltf", new GLTFAssetLoader());
@@ -93,7 +95,7 @@ public class GLTFQuickStartExample extends ApplicationAdapter {
         // setup skybox
         skybox = new SceneSkybox(environmentCubemap);
         sceneManager.setSkyBox(skybox);
-        long millis = TimeUtils.millis();
+
 
         sceneAsset = new GLTFLoader().load(Gdx.files.internal(MODEL_ASSET));
         scene = new Scene(sceneAsset.scene);
@@ -103,9 +105,9 @@ public class GLTFQuickStartExample extends ApplicationAdapter {
 
         System.out.println("Time to create Scene: " + newMillis);
 
-        String status = profiler.getStatus();
-        System.out.println("Profile Create Status: \n" + status);
-        profiler.reset();
+//        String status = profiler.getStatus();
+//        System.out.println("Profile Create Status: \n" + status);
+//        profiler.reset();
 
     }
 
@@ -134,11 +136,11 @@ public class GLTFQuickStartExample extends ApplicationAdapter {
         sceneManager.update(deltaTime);
         sceneManager.render();
 
-        if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-            String status = profiler.getStatus();
-            System.out.println("Profile Render Status: \n" + status);
-        }
-        profiler.reset();
+//        if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+//            String status = profiler.getStatus();
+//            System.out.println("Profile Render Status: \n" + status);
+//        }
+//        profiler.reset();
     }
 
     @Override
